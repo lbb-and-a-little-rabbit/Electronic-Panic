@@ -2,15 +2,21 @@
 
 #include <SFML/Graphics.hpp>
 #include "Room.h"
+#include "Wall.h"
 
 class Game{
+    bool updated;
+    int room_idx;
     sf::RenderWindow window;
     sf::Texture backgroundTexture;
     std::unique_ptr<sf::Sprite> backgroundSprite;
+    std::unique_ptr<Room> currentRoom;
+    std::vector<Wall> walls;
 
     void processEvents();
     void update();
     void render();
+    void loadBackground(int idx);
 
 public:
     Game(unsigned w=800,unsigned int h=600);
