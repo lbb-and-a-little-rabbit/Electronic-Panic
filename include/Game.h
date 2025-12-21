@@ -1,6 +1,7 @@
 #pragma once
 
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
+#include "Room.h"
 
 class Game{
     sf::RenderWindow window;
