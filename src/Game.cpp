@@ -3,10 +3,11 @@
 #include <iostream>
 
 std::vector<std::string> background_path={
+    "assets/CPU.png",
     "assets/CPU.png"
 };
 
-Game::Game(unsigned int w,unsigned int h) : updated(false),room_idx(0),window(sf::VideoMode({w,h}),"Electronic Panic") {
+Game::Game(unsigned int w,unsigned int h) : updated(false),room_idx(1),window(sf::VideoMode({w,h}),"Electronic Panic") {
     //set sprite
     if (!backgroundTexture.loadFromFile(background_path[room_idx])) {
         std::cerr << "Background Loading Failed!\n";
@@ -25,15 +26,22 @@ Game::Game(unsigned int w,unsigned int h) : updated(false),room_idx(0),window(sf
     //set rooms
     currentRoom=std::make_unique<Room>(room_idx);
 
-    //set walls
+    //set walls,electronics
     const float cellSize=40.0f; // 每个格子的大小
     for(int y=0;y<15;y++){
         for(int x=0;x<21;x++){
             if(currentRoom->map[y][x]=='#'){
                 walls.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize);
             }
+            else if(currentRoom->map[y][x]=='+'){
+                electronics.emplace_back(x*cellSize,y*cellSize,cellSize/2,true);
+            }
+            else if(currentRoom->map[y][x]=='-'){
+                electronics.emplace_back(x*cellSize,y*cellSize,cellSize/2,false);
+            }
         }
     }
+
 }
 
 void Game::loadBackground(int idx) {
@@ -80,6 +88,15 @@ void Game::update(){
 void Game::render(){
     window.clear(sf::Color(50, 50, 50));
     window.draw(*backgroundSprite); 
-    for(Wall &wall:walls) window.draw(wall.wallSprite);
+    wallrender();
+    electronicrender();
     window.display();
+}
+
+void Game::wallrender(){
+    for(Wall &wall:walls) window.draw(wall.wallSprite);
+}
+
+void Game::electronicrender(){
+    for(Electronic &e:electronics) window.draw(e.electronicSprite);
 }
