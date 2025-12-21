@@ -4,6 +4,8 @@
 
 class Game{
     sf::RenderWindow window;
+    sf::Texture backgroundTexture;
+    std::unique_ptr<sf::Sprite> backgroundSprite;
 
     void processEvents();
     void update();
