@@ -7,7 +7,7 @@ std::vector<std::string> background_path={
     "assets/CPU.png"
 };
 
-Game::Game(unsigned int w,unsigned int h) : updated(false),room_idx(1),window(sf::VideoMode({w,h}),"Electronic Panic") {
+Game::Game(unsigned int w,unsigned int h) : player(nullptr),updated(false),room_idx(1),window(sf::VideoMode({w,h}),"Electronic Panic") {
     //set sprite
     if (!backgroundTexture.loadFromFile(background_path[room_idx])) {
         std::cerr << "Background Loading Failed!\n";
@@ -41,6 +41,9 @@ Game::Game(unsigned int w,unsigned int h) : updated(false),room_idx(1),window(sf
             }
             else if(currentRoom->map[y][x]=='t'){
                 orgates.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize);       
+            }
+            else if(currentRoom->map[y][x]=='B'){
+                player=new Player(x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize/2.7,true);
             }
         }
     }
@@ -79,6 +82,7 @@ void Game::processEvents(){
             window.close();
         }
     }
+    player->control(walls,electronics);
 }
 
 void Game::update(){
@@ -94,6 +98,7 @@ void Game::render(){
     wallrender();
     electronicrender();
     gaterender();
+    playerrender();
     window.display();
 }
 
@@ -107,4 +112,8 @@ void Game::electronicrender(){
 
 void Game::gaterender(){
     for(OR &g:orgates) window.draw(g.orSprite);
+}
+
+void Game::playerrender(){
+    window.draw(player->playerSprite);
 }

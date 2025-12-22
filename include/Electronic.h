@@ -9,6 +9,7 @@ class Electronic{
     static sf::Texture negative_electronicTexture;
     sf::Sprite electronicSprite;
     friend class Game;
+    friend class Player;
 
 public:
     Electronic(float x,float y,float r,bool positive);

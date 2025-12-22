@@ -7,6 +7,7 @@ class Wall {
     static sf::Texture wallTexture;
     sf::Sprite wallSprite;
     friend class Game;
+    friend class Player;
 
 public:
     Wall(float x, float y, float width, float height);
