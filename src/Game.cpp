@@ -34,10 +34,13 @@ Game::Game(unsigned int w,unsigned int h) : updated(false),room_idx(1),window(sf
                 walls.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize);
             }
             else if(currentRoom->map[y][x]=='+'){
-                electronics.emplace_back(x*cellSize,y*cellSize,cellSize/2,true);
+                electronics.emplace_back(x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize/2,true);
             }
             else if(currentRoom->map[y][x]=='-'){
-                electronics.emplace_back(x*cellSize,y*cellSize,cellSize/2,false);
+                electronics.emplace_back(x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize/2,false);
+            }
+            else if(currentRoom->map[y][x]=='t'){
+                orgates.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize);       
             }
         }
     }
@@ -90,6 +93,7 @@ void Game::render(){
     window.draw(*backgroundSprite); 
     wallrender();
     electronicrender();
+    gaterender();
     window.display();
 }
 
@@ -99,4 +103,8 @@ void Game::wallrender(){
 
 void Game::electronicrender(){
     for(Electronic &e:electronics) window.draw(e.electronicSprite);
+}
+
+void Game::gaterender(){
+    for(OR &g:orgates) window.draw(g.orSprite);
 }

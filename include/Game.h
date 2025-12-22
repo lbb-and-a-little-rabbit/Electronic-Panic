@@ -4,6 +4,7 @@
 #include "Room.h"
 #include "Wall.h"
 #include "Electronic.h"
+#include "OR.h"
 
 class Game{
     bool updated;
@@ -14,6 +15,7 @@ class Game{
     std::unique_ptr<Room> currentRoom;
     std::vector<Wall> walls;
     std::vector<Electronic> electronics;
+    std::vector<OR> orgates;
 
     void processEvents();
     void update();
@@ -21,6 +23,7 @@ class Game{
     void loadBackground(int idx);
     void wallrender();
     void electronicrender();
+    void gaterender();
 
 public:
     Game(unsigned w=800,unsigned int h=600);
