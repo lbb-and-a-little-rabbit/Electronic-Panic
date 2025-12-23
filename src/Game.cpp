@@ -4,7 +4,8 @@
 
 std::vector<std::string> background_path={
     "assets/CPU.png",
-    "assets/CPU.png"
+    "assets/room1.jpg",
+    "assets/room2.jpeg"
 };
 
 Game::Game(unsigned int w,unsigned int h) : player(nullptr),updated(false),room_idx(1),window(sf::VideoMode({w,h}),"Electronic Panic") {

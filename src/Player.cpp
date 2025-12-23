@@ -1,9 +1,9 @@
 #include "Player.h"
 
 sf::Texture Player::p_playerTexture("assets/player_positive.png");
-sf::Texture Player::n_playerTexture("assets/player_negative.png");
+sf::Texture Player::n_playerTexture("assets/player_negative (2).png");
 
-Player::Player(float x,float y,float r,bool status) : x(x),y(y),r(r),status(status),playerSprite(status?p_playerTexture:n_playerTexture) {
+Player::Player(float x,float y,float r,bool status) : r(r),pos(x,y),physicalR(0.7*r),status(status),playerSprite(status?p_playerTexture:n_playerTexture) {
     // 设置位置和缩放（r 为半径/大小）
     sf::Vector2u ts = playerSprite.getTexture().getSize();
     // 缩放成直径 2*r
@@ -11,7 +11,7 @@ Player::Player(float x,float y,float r,bool status) : x(x),y(y),r(r),status(stat
     // 设置中心原点
     playerSprite.setOrigin(sf::Vector2f(ts.x/2.f, ts.y/2.f));
     // 设置位置
-    playerSprite.setPosition(sf::Vector2f(x, y));
+    playerSprite.setPosition(pos);
 }
 
 void Player::control(std::vector<Wall> &walls,std::vector<Electronic> &electronics){
@@ -25,8 +25,8 @@ void Player::control(std::vector<Wall> &walls,std::vector<Electronic> &electroni
     //shape.move(movement);
     playerSprite.move(movement);
     if(touchWall(walls)) shape.setPosition(old_pos),playerSprite.setPosition(old_pos);
-    x=playerSprite.getPosition().x;
-    y=playerSprite.getPosition().y;
+    pos.x=playerSprite.getPosition().x;
+    pos.y=playerSprite.getPosition().y;
 
     if(touchElectronic(electronics)){
         changeStatus();
@@ -35,8 +35,12 @@ void Player::control(std::vector<Wall> &walls,std::vector<Electronic> &electroni
 
 bool Player::touchWall(std::vector<Wall> &walls){
     sf::FloatRect PlayBound = playerSprite.getGlobalBounds();
+    sf::FloatRect trueBound;
+    trueBound.position=PlayBound.position;
+    trueBound.size.x=PlayBound.size.x*0.8;
+    trueBound.size.y=PlayBound.size.y*0.8;
     for (auto wall : walls) {
-        if (PlayBound.findIntersection(wall.wallSprite.getGlobalBounds())) {
+        if (trueBound.findIntersection(wall.wallSprite.getGlobalBounds())) {
             return true;
         }
     }
@@ -47,11 +51,7 @@ bool Player::touchElectronic(std::vector<Electronic> &electronics){
     sf::FloatRect PlayBound = playerSprite.getGlobalBounds();
     for (auto e : electronics) {
         if (PlayBound.findIntersection(e.electronicSprite.getGlobalBounds())) {
-            if(e.positive!=status){
-                e.positive=!e.positive;
-                return true;
-            }
-            else return false;
+            return e.positive!=status;
         }
     }
     return false;
@@ -67,7 +67,7 @@ void Player::changeStatus(){
     // 设置中心原点
     playerSprite.setOrigin(sf::Vector2f(ts.x/2.f, ts.y/2.f));
     // 设置位置
-    playerSprite.setPosition(sf::Vector2f(x, y));
+    playerSprite.setPosition(sf::Vector2f(pos.x, pos.y));
 }
 
 bool Player::getstatus(){

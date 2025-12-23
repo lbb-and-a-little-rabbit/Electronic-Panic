@@ -6,7 +6,9 @@
 
 class Player{
     float speed = 0.1;
-    float x,y,r;
+    sf::Vector2f pos;
+    float physicalR; 
+    float r;
     bool status;
     sf::CircleShape shape;
     static sf::Texture p_playerTexture;
