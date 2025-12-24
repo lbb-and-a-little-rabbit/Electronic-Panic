@@ -57,6 +57,20 @@ bool Player::touchElectronic(std::vector<Electronic> &electronics){
     return false;
 }
 
+int Player::touchtransport(std::vector<Transport> &transports){
+    sf::FloatRect PlayBound = playerSprite.getGlobalBounds();
+    sf::FloatRect trueBound;
+    trueBound.position=PlayBound.position;
+    trueBound.size.x=PlayBound.size.x*0.8;
+    trueBound.size.y=PlayBound.size.y*0.8;
+    for (auto &t : transports) {
+        if (trueBound.findIntersection(t.transSprite.getGlobalBounds())) {
+            return t.towards;
+        }
+    }
+    return -1;
+}
+
 void Player::changeStatus(){
     status=!status;
     playerSprite.setTexture(status?p_playerTexture:n_playerTexture);

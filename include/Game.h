@@ -9,6 +9,7 @@
 #include "NOT.h"
 #include "XOR.h"
 #include "Player.h"
+#include "Transport.h"
 
 class Game{
     bool updated;
@@ -18,12 +19,15 @@ class Game{
     std::unique_ptr<sf::Sprite> backgroundSprite;
     std::unique_ptr<Room> currentRoom;
     Player* player;
+    std::vector<Transport> transports;
     std::vector<Wall> walls;
     std::vector<Electronic> electronics;
     std::vector<OR> orgates;
 
-
+    void set_based_on_map();
+    void vector_clear();
     void processEvents();
+    void call_update();
     void update();
     void render();
     void loadBackground(int idx);
@@ -31,6 +35,7 @@ class Game{
     void electronicrender();
     void gaterender();
     void playerrender();
+    void transrender();
 
 public:
     Game(unsigned w=800,unsigned int h=600);

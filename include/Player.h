@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "Wall.h"
 #include "Electronic.h"
+#include "Transport.h"
 
 class Player{
     float speed = 0.1;
@@ -21,6 +22,7 @@ public:
     void control(std::vector<Wall> &walls,std::vector<Electronic> &electronics);
     bool touchWall(std::vector<Wall> &walls);
     bool touchElectronic(std::vector<Electronic> &electronics);
+    int touchtransport(std::vector<Transport> &transports);
     void changeStatus();
     bool getstatus();
 };

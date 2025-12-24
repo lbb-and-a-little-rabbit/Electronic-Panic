@@ -5,10 +5,12 @@
 std::vector<std::string> background_path={
     "assets/CPU.png",
     "assets/room1.jpg",
-    "assets/room2.jpeg"
+    "assets/room2.jpeg",
+    "assets/CPU.png",
+    "assets/CPU.png"
 };
 
-Game::Game(unsigned int w,unsigned int h) : player(nullptr),updated(false),room_idx(1),window(sf::VideoMode({w,h}),"Electronic Panic") {
+Game::Game(unsigned int w,unsigned int h) : player(nullptr),updated(false),room_idx(0),window(sf::VideoMode({w,h}),"Electronic Panic") {
     //set sprite
     if (!backgroundTexture.loadFromFile(background_path[room_idx])) {
         std::cerr << "Background Loading Failed!\n";
@@ -27,6 +29,21 @@ Game::Game(unsigned int w,unsigned int h) : player(nullptr),updated(false),room_
     //set rooms
     currentRoom=std::make_unique<Room>(room_idx);
 
+    //set vector
+    set_based_on_map();
+    
+}
+
+void Game::vector_clear(){
+    walls.clear();
+    electronics.clear();
+    orgates.clear();
+    if(player) delete player;
+    transports.clear();
+}
+
+void Game::set_based_on_map(){
+    vector_clear();
     //set walls,electronics
     const float cellSize=40.0f; // 每个格子的大小
     for(int y=0;y<15;y++){
@@ -46,9 +63,11 @@ Game::Game(unsigned int w,unsigned int h) : player(nullptr),updated(false),room_
             else if(currentRoom->map[y][x]=='B'){
                 player=new Player(x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize/2.7,true);
             }
+            else if(currentRoom->map[y][x]-'0'>=0&&currentRoom->map[y][x]-'0'<MAP_CNT){
+                transports.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize,currentRoom->map[y][x]-'0');
+            }
         }
     }
-
 }
 
 void Game::loadBackground(int idx) {
@@ -84,6 +103,15 @@ void Game::processEvents(){
         }
     }
     player->control(walls,electronics);
+    call_update();
+}
+
+void Game::call_update(){
+    int towards=player->touchtransport(transports);
+    if(towards!=-1){
+        updated=true;
+        room_idx=towards;
+    }
 }
 
 void Game::update(){
@@ -91,6 +119,7 @@ void Game::update(){
     updated=false;
     loadBackground(room_idx);
     currentRoom=std::make_unique<Room>(room_idx); 
+    set_based_on_map();
 }
 
 void Game::render(){
@@ -98,6 +127,7 @@ void Game::render(){
     window.draw(*backgroundSprite); 
     wallrender();
     electronicrender();
+    transrender();
     gaterender();
     playerrender();
     window.display();
@@ -117,4 +147,8 @@ void Game::gaterender(){
 
 void Game::playerrender(){
     window.draw(player->playerSprite);
+}
+
+void Game::transrender(){
+    for(Transport &t:transports) window.draw(t.transSprite);
 }
