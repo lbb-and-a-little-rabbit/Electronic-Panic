@@ -19,6 +19,7 @@ find_package(SFML 3 REQUIRED COMPONENTS
     Graphics
     Window
     System
+    Audio
 )
 
 # ===== 源文件 =====
@@ -43,6 +44,7 @@ target_link_libraries(Maze
         SFML::Graphics
         SFML::Window
         SFML::System
+        SFML::Audio
 )
 
 # ===== 复制 assets 到构建目录（可选但强烈推荐）=====

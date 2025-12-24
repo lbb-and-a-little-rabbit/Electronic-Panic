@@ -10,6 +10,14 @@ std::vector<std::string> background_path={
     "assets/CPU.png"
 };
 
+std::vector<std::string> music_path={
+    "assets/CPU.ogg",
+    "assets/dive.ogg",
+    "assets/dive.ogg",
+    "assets/dive.ogg",
+    "assets/dive.ogg",
+};
+
 Game::Game(unsigned int w,unsigned int h) : player(nullptr),updated(false),room_idx(0),window(sf::VideoMode({w,h}),"Electronic Panic") {
     //set sprite
     if (!backgroundTexture.loadFromFile(background_path[room_idx])) {
@@ -26,6 +34,13 @@ Game::Game(unsigned int w,unsigned int h) : player(nullptr),updated(false),room_
     );
     backgroundSprite->setScale(scale);
 
+    //set music
+    if (!currentMusic.openFromFile(music_path[room_idx])) {
+        std::cerr << "Music Loading Failed!\n";
+        exit(-1);
+    }
+    currentMusic.setLooping(true);
+
     //set rooms
     currentRoom=std::make_unique<Room>(room_idx);
 
@@ -40,6 +55,7 @@ void Game::vector_clear(){
     orgates.clear();
     if(player) delete player;
     transports.clear();
+    judgements.clear();
 }
 
 void Game::set_based_on_map(){
@@ -66,6 +82,9 @@ void Game::set_based_on_map(){
             else if(currentRoom->map[y][x]-'0'>=0&&currentRoom->map[y][x]-'0'<MAP_CNT){
                 transports.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize,currentRoom->map[y][x]-'0');
             }
+            else if(currentRoom->map[y][x]=='*'||currentRoom->map[y][x]=='/'){
+                judgements.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize,currentRoom->map[y][x]);
+            }
         }
     }
 }
@@ -85,10 +104,26 @@ void Game::loadBackground(int idx) {
         float(ws.y) / ts.y
     );
     backgroundSprite->setScale(scale);
+
+    //set music
+    // 淡出旧音乐
+    while(currentMusic.getVolume() > 0){
+        currentMusic.setVolume(currentMusic.getVolume() - 1);
+        sf::sleep(sf::milliseconds(10));
+    }
+    currentMusic.stop();
+    if(!currentMusic.openFromFile(music_path[idx])){
+        std::cerr << "Music Loading Failed!\n";
+        exit(-1);
+    }
+    currentMusic.setVolume(100);
+    currentMusic.setLooping(true);
+    currentMusic.play();
 }
 
 
 void Game::run(){
+    currentMusic.play();
     while(window.isOpen()){
         processEvents();
         update();
@@ -128,6 +163,7 @@ void Game::render(){
     wallrender();
     electronicrender();
     transrender();
+    judgementrender();
     gaterender();
     playerrender();
     window.display();
@@ -151,4 +187,8 @@ void Game::playerrender(){
 
 void Game::transrender(){
     for(Transport &t:transports) window.draw(t.transSprite);
+}
+
+void Game::judgementrender(){
+    for(Judgement &j:judgements) window.draw(j.judgeSprite);
 }

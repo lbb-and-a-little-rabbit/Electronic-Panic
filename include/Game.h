@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "Room.h"
 #include "Wall.h"
 #include "Electronic.h"
@@ -10,6 +11,7 @@
 #include "XOR.h"
 #include "Player.h"
 #include "Transport.h"
+#include "Judgement.h"
 
 class Game{
     bool updated;
@@ -17,8 +19,10 @@ class Game{
     sf::RenderWindow window;
     sf::Texture backgroundTexture;
     std::unique_ptr<sf::Sprite> backgroundSprite;
+    sf::Music currentMusic;
     std::unique_ptr<Room> currentRoom;
     Player* player;
+    std::vector<Judgement> judgements;
     std::vector<Transport> transports;
     std::vector<Wall> walls;
     std::vector<Electronic> electronics;
@@ -36,6 +40,7 @@ class Game{
     void gaterender();
     void playerrender();
     void transrender();
+    void judgementrender();
 
 public:
     Game(unsigned w=800,unsigned int h=600);
