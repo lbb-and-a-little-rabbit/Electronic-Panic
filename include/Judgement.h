@@ -11,5 +11,5 @@ class Judgement{
     friend class Player;
 
 public:
-    Judgement(float x, float y, float width, float height,char judge);
+    Judgement(float x, float y, float width, float height,bool judge);
 };

@@ -2,7 +2,7 @@
 
 sf::Texture Judgement::judgeTexture("assets/judgement.jpg");
 
-Judgement::Judgement(float x, float y, float width, float height,char judge) : judge(judge=='*'),judgeSprite(judgeTexture) {
+Judgement::Judgement(float x, float y, float width, float height,bool judge) : judge(judge=='*'),judgeSprite(judgeTexture) {
     shape.setSize({width, height});
     shape.setPosition({x, y});
 

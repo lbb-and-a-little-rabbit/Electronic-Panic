@@ -27,6 +27,9 @@ class Game{
     std::vector<Wall> walls;
     std::vector<Electronic> electronics;
     std::vector<OR> orgates;
+    std::vector<AND> andgates;
+    std::vector<NOT> notgates;
+    std::vector<XOR> xorgates;
 
     void set_based_on_map();
     void vector_clear();

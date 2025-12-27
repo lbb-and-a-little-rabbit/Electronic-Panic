@@ -137,7 +137,7 @@ void Game::processEvents(){
             window.close();
         }
     }
-    player->control(walls,electronics);
+    player->control(walls,electronics,orgates,andgates,notgates,xorgates);
     call_update();
 }
 
@@ -179,6 +179,9 @@ void Game::electronicrender(){
 
 void Game::gaterender(){
     for(OR &g:orgates) window.draw(g.orSprite);
+    for(AND &g:andgates) window.draw(g.andSprite);
+    for(NOT &g:notgates) window.draw(g.notSprite);
+    for(XOR &g:xorgates) window.draw(g.xorSprite);
 }
 
 void Game::playerrender(){

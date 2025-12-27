@@ -8,6 +8,7 @@ class OR : public Gate{
     static sf::Texture orTexture;
     sf::Sprite orSprite;
     friend class Game;
+    friend class Player;
 
 public:
     OR(float x, float y, float width, float height);
