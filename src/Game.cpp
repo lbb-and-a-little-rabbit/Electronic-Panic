@@ -56,11 +56,12 @@ void Game::vector_clear(){
     if(player) delete player;
     transports.clear();
     judgements.clear();
+    sources.clear();
 }
 
 void Game::set_based_on_map(){
     vector_clear();
-    //set walls,electronics
+    //set vectors
     const float cellSize=40.0f; // 每个格子的大小
     for(int y=0;y<15;y++){
         for(int x=0;x<21;x++){
@@ -84,6 +85,9 @@ void Game::set_based_on_map(){
             }
             else if(currentRoom->map[y][x]=='*'||currentRoom->map[y][x]=='/'){
                 judgements.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize,currentRoom->map[y][x]);
+            }
+            else if(currentRoom->map[y][x]=='S'){
+                sources.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize);
             }
         }
     }
@@ -161,6 +165,7 @@ void Game::render(){
     window.clear(sf::Color(50, 50, 50));
     window.draw(*backgroundSprite); 
     wallrender();
+    sourcerender();
     electronicrender();
     transrender();
     judgementrender();
@@ -194,4 +199,8 @@ void Game::transrender(){
 
 void Game::judgementrender(){
     for(Judgement &j:judgements) window.draw(j.judgeSprite);
+}
+
+void Game::sourcerender(){
+    for(Source &s:sources) window.draw(s.sourceSprite);
 }

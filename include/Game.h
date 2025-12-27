@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "Transport.h"
 #include "Judgement.h"
+#include "Source.h"
 
 class Game{
     bool updated;
@@ -30,6 +31,7 @@ class Game{
     std::vector<AND> andgates;
     std::vector<NOT> notgates;
     std::vector<XOR> xorgates;
+    std::vector<Source> sources;
 
     void set_based_on_map();
     void vector_clear();
@@ -44,6 +46,7 @@ class Game{
     void playerrender();
     void transrender();
     void judgementrender();
+    void sourcerender();
 
 public:
     Game(unsigned w=800,unsigned int h=600);
