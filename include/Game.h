@@ -13,10 +13,12 @@
 #include "Transport.h"
 #include "Judgement.h"
 #include "Source.h"
+#include "Msgbox.h"
 
 class Game{
     bool updated;
     int room_idx;
+    Msgbox msgbox;
     sf::RenderWindow window;
     sf::Texture backgroundTexture;
     std::unique_ptr<sf::Sprite> backgroundSprite;
@@ -38,6 +40,7 @@ class Game{
     void processEvents();
     void call_update();
     void update();
+    bool call_Press(sf::Keyboard::Key key);
     void render();
     void loadBackground(int idx);
     void wallrender();
@@ -47,6 +50,7 @@ class Game{
     void transrender();
     void judgementrender();
     void sourcerender();
+    void msgboxrender();
 
 public:
     Game(unsigned w=800,unsigned int h=600);

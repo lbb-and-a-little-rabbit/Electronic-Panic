@@ -18,7 +18,7 @@ std::vector<std::string> music_path={
     "assets/dive.ogg",
 };
 
-Game::Game(unsigned int w,unsigned int h) : player(nullptr),updated(false),room_idx(0),window(sf::VideoMode({w,h}),"Electronic Panic") {
+Game::Game(unsigned int w,unsigned int h) : player(nullptr),updated(false),room_idx(0),window(sf::VideoMode({w,h}),"Electronic Panic"),msgbox(0.25*w,0,0.5*w,0.125*h) {
     //set sprite
     if (!backgroundTexture.loadFromFile(background_path[room_idx])) {
         std::cerr << "Background Loading Failed!\n";
@@ -148,8 +148,14 @@ void Game::processEvents(){
 void Game::call_update(){
     int towards=player->touchtransport(transports);
     if(towards!=-1){
-        updated=true;
-        room_idx=towards;
+        msgbox.set("Press Space to Change the Room");
+        if(call_Press(sf::Keyboard::Key::Space)){
+            updated=true;
+            room_idx=towards;
+        }
+    }
+    else{
+        msgbox.set("");
     }
 }
 
@@ -159,6 +165,10 @@ void Game::update(){
     loadBackground(room_idx);
     currentRoom=std::make_unique<Room>(room_idx); 
     set_based_on_map();
+}
+
+bool Game::call_Press(sf::Keyboard::Key key){
+    return sf::Keyboard::isKeyPressed(key);
 }
 
 void Game::render(){
@@ -171,6 +181,11 @@ void Game::render(){
     judgementrender();
     gaterender();
     playerrender();
+
+    //temp for test
+    msgboxrender();
+    //tem for test
+
     window.display();
 }
 
@@ -203,4 +218,9 @@ void Game::judgementrender(){
 
 void Game::sourcerender(){
     for(Source &s:sources) window.draw(s.sourceSprite);
+}
+
+void Game::msgboxrender(){
+    //window.draw(msgbox.msgSprite);
+    window.draw(msgbox.text);
 }
