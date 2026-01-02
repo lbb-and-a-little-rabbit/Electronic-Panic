@@ -18,7 +18,7 @@ std::vector<std::string> music_path={
     "assets/dive.ogg",
 };
 
-Game::Game(unsigned int w,unsigned int h) : player_status(true),player(nullptr),updated(false),room_idx(0),window(sf::VideoMode({w,h}),"Electronic Panic"),msgbox(0.25*w,0,0.5*w,0.125*h) {
+Game::Game(unsigned int w,unsigned int h) : player_status(false),player(nullptr),updated(false),room_idx(0),window(sf::VideoMode({w,h}),"Electronic Panic"),msgbox(0.25*w,0,0.5*w,0.125*h) {
     //set sprite
     if (!backgroundTexture.loadFromFile(background_path[room_idx])) {
         std::cerr << "Background Loading Failed!\n";
@@ -139,6 +139,7 @@ void Game::Frame(){
     for (Wall &wall : walls) {
         wall.update(delta);
     }
+    player->update(delta);
 }
 
 void Game::run(){
