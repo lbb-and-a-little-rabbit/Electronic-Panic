@@ -28,7 +28,7 @@ public:
     bool touchWall(std::vector<Wall> &walls);
     bool touchElectronic(std::vector<Electronic> &electronics);
     int touchtransport(std::vector<Transport> &transports);
-    bool touchjudgement(std::vector<Judgement> &judgements);
+    Info_Judgement touchjudgement(std::vector<Judgement> &judgements);
     bool touchGate(std::vector<OR> &ors,std::vector<AND> &ands,std::vector<NOT> &nots,std::vector<XOR> &xors);
     void changeStatus();
     bool getstatus();

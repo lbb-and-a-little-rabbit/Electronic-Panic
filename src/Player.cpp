@@ -63,14 +63,18 @@ int Player::touchtransport(std::vector<Transport> &transports){
     return -1;
 }
 
-bool Player::touchjudgement(std::vector<Judgement> &judgements){
+Info_Judgement Player::touchjudgement(std::vector<Judgement> &judgements){
+    Info_Judgement res;
     sf::FloatRect trueBound = getHitbox();
     for(auto &j : judgements){
         if (trueBound.findIntersection(j.judgeSprite.getGlobalBounds())) {
-            return status==j.judge;
+            res.judge=j.judge;
+            res.mappos_x=j.mappos_x;
+            res.mappos_y=j.mappos_y;
+            return res;
         }
     }
-    return false;
+    return res;
 }
 
 bool Player::touchGate(std::vector<OR> &ors,std::vector<AND> &ands,std::vector<NOT> &nots,std::vector<XOR> &xors){

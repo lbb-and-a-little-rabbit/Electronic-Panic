@@ -84,7 +84,7 @@ void Game::set_based_on_map(){
                 transports.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize,currentRoom->map[y][x]-'0');
             }
             else if(currentRoom->map[y][x]=='*'||currentRoom->map[y][x]=='/'){
-                judgements.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize,currentRoom->map[y][x]);
+                judgements.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize,currentRoom->map[y][x],y,x);
             }
             else if(currentRoom->map[y][x]=='S'){
                 sources.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize);
@@ -152,6 +152,27 @@ void Game::call_update(){
         if(call_Press(sf::Keyboard::Key::Space)){
             updated=true;
             room_idx=towards;
+        }
+        return;
+    }
+    else{
+        msgbox.set("");
+    }
+
+    Info_Judgement info=player->touchjudgement(judgements);
+    if(info.mappos_x!=-1){
+        msgbox.set("Press Space to Fix the Gate");
+        if(call_Press(sf::Keyboard::Key::Space)){
+            std::cout << player->status << ' ' << info.judge;
+            if(player->status==info.judge){
+                std::cout << "YES!" << '\n';
+                currentRoom->map[info.mappos_x][info.mappos_y]=' ';
+                updated=true;
+                //TODO
+            }
+            else{
+                //TODO
+            }
         }
     }
     else{
