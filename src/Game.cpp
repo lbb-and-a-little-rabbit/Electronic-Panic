@@ -125,10 +125,29 @@ void Game::loadBackground(int idx) {
     currentMusic.play();
 }
 
+void Game::Frame(){
+    elapsed += delta;
+    frameCount++;
+
+    if (elapsed >= 1.f) {
+        fps = frameCount / elapsed;
+        frameCount = 0;
+        elapsed = 0.f;
+        std::cout << "FPS: " << fps << std::endl;
+    }
+
+    for (Wall &wall : walls) {
+        wall.update(delta);
+    }
+}
 
 void Game::run(){
     currentMusic.play();
     while(window.isOpen()){
+        dt = frameClock.restart();
+        delta = dt.asSeconds();
+        Frame();
+
         processEvents();
         update();
         render();

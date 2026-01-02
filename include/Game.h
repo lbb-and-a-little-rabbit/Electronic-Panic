@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/System.hpp>
 #include "Room.h"
 #include "Wall.h"
 #include "Electronic.h"
@@ -16,15 +17,28 @@
 #include "Msgbox.h"
 
 class Game{
+    //Time
+    sf::Clock frameClock;
+    sf::Time dt;
+    float delta;
+    int frameCount=0;
+    float fps=0.f;
+    float elapsed=0.f;
+
+    //Status
     bool updated;
     int room_idx;
     bool player_status;
+
+    //Window
     Msgbox msgbox;
     sf::RenderWindow window;
     sf::Texture backgroundTexture;
     std::unique_ptr<sf::Sprite> backgroundSprite;
     sf::Music currentMusic;
     std::unique_ptr<Room> currentRoom;
+
+    //Main Elements
     Player* player;
     std::vector<Judgement> judgements;
     std::vector<Transport> transports;
@@ -35,6 +49,11 @@ class Game{
     std::vector<NOT> notgates;
     std::vector<XOR> xorgates;
     std::vector<Source> sources;
+
+    //Function
+
+    //Time
+    void Frame();
 
     void set_based_on_map();
     void vector_clear();
