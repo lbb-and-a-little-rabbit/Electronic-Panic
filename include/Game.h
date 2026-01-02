@@ -18,6 +18,7 @@
 class Game{
     bool updated;
     int room_idx;
+    bool player_status;
     Msgbox msgbox;
     sf::RenderWindow window;
     sf::Texture backgroundTexture;

@@ -18,7 +18,7 @@ std::vector<std::string> music_path={
     "assets/dive.ogg",
 };
 
-Game::Game(unsigned int w,unsigned int h) : player(nullptr),updated(false),room_idx(0),window(sf::VideoMode({w,h}),"Electronic Panic"),msgbox(0.25*w,0,0.5*w,0.125*h) {
+Game::Game(unsigned int w,unsigned int h) : player_status(true),player(nullptr),updated(false),room_idx(0),window(sf::VideoMode({w,h}),"Electronic Panic"),msgbox(0.25*w,0,0.5*w,0.125*h) {
     //set sprite
     if (!backgroundTexture.loadFromFile(background_path[room_idx])) {
         std::cerr << "Background Loading Failed!\n";
@@ -78,7 +78,7 @@ void Game::set_based_on_map(){
                 orgates.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize);       
             }
             else if(currentRoom->map[y][x]=='B'){
-                player=new Player(x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize/2.7,true);
+                player=new Player(x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize/2.7,player_status);
             }
             else if(currentRoom->map[y][x]-'0'>=0&&currentRoom->map[y][x]-'0'<MAP_CNT){
                 transports.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize,currentRoom->map[y][x]-'0');
@@ -146,6 +146,8 @@ void Game::processEvents(){
 }
 
 void Game::call_update(){
+    player_status=player->status;
+
     int towards=player->touchtransport(transports);
     if(towards!=-1){
         msgbox.set("Press Space to Change the Room");
