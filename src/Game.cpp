@@ -18,6 +18,8 @@ std::vector<std::string> music_path={
     "assets/dive.ogg",
 };
 
+/*===       constructor       ===*/
+
 Game::Game(unsigned int w,unsigned int h) : player_status(false),player(nullptr),updated(false),room_idx(0),window(sf::VideoMode({w,h}),"Electronic Panic"),msgbox(0.25*w,0,0.5*w,0.125*h),msgassistant(MAP_CNT,w,h) {
     //set sprite
     if (!backgroundTexture.loadFromFile(background_path[room_idx])) {
@@ -50,6 +52,11 @@ Game::Game(unsigned int w,unsigned int h) : player_status(false),player(nullptr)
     //msgAssist
     msgassistant.show(room_idx);
 }
+
+/*===       constructor       ===*/
+
+
+/*===       Asisstant Function       ===*/
 
 void Game::vector_clear(){
     walls.clear();
@@ -93,6 +100,7 @@ void Game::set_based_on_map(){
             }
             else if(currentRoom->map[y][x]=='*'||currentRoom->map[y][x]=='/'){
                 judgements.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize,currentRoom->map[y][x],y,x);
+                unfixed_gates++;
             }
             else if(currentRoom->map[y][x]=='S'){
                 sources.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize);
@@ -118,6 +126,14 @@ void Game::loadBackground(int idx) {
     backgroundSprite->setScale(scale);
 
     //set music
+    if(!music_change){
+        music_change=true;
+        return;
+    }
+    //acoustic
+    acoustics.openFromFile("assets/trans.mp3");
+    acoustics.setLooping(false);
+    acoustics.play();
     // 淡出旧音乐
     while(currentMusic.getVolume() > 0){
         currentMusic.setVolume(currentMusic.getVolume() - 1);
@@ -131,6 +147,25 @@ void Game::loadBackground(int idx) {
     currentMusic.setVolume(100);
     currentMusic.setLooping(true);
     currentMusic.play();
+}
+
+/*===       Asisstant Function       ===*/
+
+
+
+/*===         MAIN         ===*/
+
+void Game::run(){
+    currentMusic.play();
+    while(window.isOpen()){
+        dt = frameClock.restart();
+        delta = dt.asSeconds();
+        Frame();
+
+        processEvents();
+        update();
+        render();
+    }
 }
 
 void Game::Frame(){
@@ -153,19 +188,6 @@ void Game::Frame(){
     player->update(delta);
 }
 
-void Game::run(){
-    currentMusic.play();
-    while(window.isOpen()){
-        dt = frameClock.restart();
-        delta = dt.asSeconds();
-        Frame();
-
-        processEvents();
-        update();
-        render();
-    }
-}
-
 void Game::processEvents(){
     while (const std::optional event = window.pollEvent()) {
         if (event->is<sf::Event::Closed>()) {
@@ -175,6 +197,11 @@ void Game::processEvents(){
             msgassistant.show(room_idx);
         }
     }
+
+    if(unfixed_gates==0&&room_idx!=0) {
+        msgassistant.show(MAP_CNT);
+    }
+
     player->control(walls,electronics,orgates,andgates,notgates,xorgates);
     call_update();
 }
@@ -204,6 +231,8 @@ void Game::call_update(){
             if(player->status==info.judge){
                 currentRoom->map[info.mappos_x][info.mappos_y]='b';
                 updated=true;
+                idx_change=false;
+                music_change=false;
                 msgbox.settime("You've fixed it!Well Down!",2.5);
             }
             else{
@@ -218,16 +247,25 @@ void Game::call_update(){
 
 void Game::update(){
     if(!updated) return;
+    unfixed_gates=0;
     updated=false;
     loadBackground(room_idx);
     currentRoom=std::make_unique<Room>(room_idx); 
-    msgassistant.show(room_idx);
+    if(idx_change)
+        msgassistant.show(room_idx);
+    idx_change=true;
     set_based_on_map();
 }
 
 bool Game::call_Press(sf::Keyboard::Key key){
     return sf::Keyboard::isKeyPressed(key);
 }
+
+/*===         MAIN         ===*/
+
+
+
+/*===            Render            ===*/
 
 void Game::render(){
     window.clear(sf::Color(50, 50, 50));
@@ -279,3 +317,5 @@ void Game::msgboxrender(){
     window.draw(msgbox.text);
     window.draw(msgassistant.msg.text);
 }
+
+/*===            Render            ===*/

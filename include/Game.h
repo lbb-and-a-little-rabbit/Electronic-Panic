@@ -29,7 +29,9 @@ class Game{
     //Status
     bool updated;
     int room_idx;
+    bool idx_change=true;
     bool player_status;
+    int unfixed_gates=0;
 
     //Window
     Msgbox msgbox;
@@ -38,6 +40,8 @@ class Game{
     sf::Texture backgroundTexture;
     std::unique_ptr<sf::Sprite> backgroundSprite;
     sf::Music currentMusic;
+    bool music_change=true;
+    sf::Music acoustics;
     std::unique_ptr<Room> currentRoom;
 
     //Main Elements

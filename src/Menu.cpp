@@ -69,6 +69,7 @@ void Menu::processEvents(MenuResult& result) {
                 // 检查是否点击了 Start 或 Exit 文本
                 if (startText.getGlobalBounds().contains(mousePos)) {
                     result = MenuResult::StartGame;
+                    currentMusic.stop();
                     return; // 点击后立即返回
                 }
 

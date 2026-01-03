@@ -19,6 +19,10 @@ void MsgAssistant::msgset(){
 }
 
 void MsgAssistant::show(int idx){
+    if(idx==messages.size()){
+        msg.set("You've fixed all the gates here!");
+        return;
+    }
     if(!vis_time[idx]&&ref_cnt[idx]<messages[idx].size()){
         msg.set(messages[idx][ref_cnt[idx]]);
         ref_cnt[idx]++;
