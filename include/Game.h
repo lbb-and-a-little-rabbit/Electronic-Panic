@@ -15,6 +15,7 @@
 #include "Judgement.h"
 #include "Source.h"
 #include "Msgbox.h"
+#include "MsgAssistant.h"
 
 class Game{
     //Time
@@ -32,6 +33,7 @@ class Game{
 
     //Window
     Msgbox msgbox;
+    MsgAssistant msgassistant;
     sf::RenderWindow window;
     sf::Texture backgroundTexture;
     std::unique_ptr<sf::Sprite> backgroundSprite;

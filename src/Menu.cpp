@@ -8,6 +8,15 @@ sf::Texture Menu::backgroundTexture("assets/menu_background.png");
 Menu::Menu()
 : window(sf::VideoMode({800, 600}), "Game Menu"),backgroundSprite(backgroundTexture),font("assets/FontB.otf"),startText(font),exitText(font)
 {
+    // 缩放铺满窗口
+    sf::Vector2u textureSize = backgroundTexture.getSize();
+    sf::Vector2u windowSize = window.getSize();
+    sf::Vector2f scale(
+        float(windowSize.x) / textureSize.x,
+        float(windowSize.y) / textureSize.y
+    );
+    backgroundSprite.setScale(scale);
+
     // Start Game 文本
     startText.setString("Start Game");
     startText.setCharacterSize(48);

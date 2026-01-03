@@ -18,7 +18,7 @@ std::vector<std::string> music_path={
     "assets/dive.ogg",
 };
 
-Game::Game(unsigned int w,unsigned int h) : player_status(false),player(nullptr),updated(false),room_idx(0),window(sf::VideoMode({w,h}),"Electronic Panic"),msgbox(0.25*w,0,0.5*w,0.125*h) {
+Game::Game(unsigned int w,unsigned int h) : player_status(false),player(nullptr),updated(false),room_idx(0),window(sf::VideoMode({w,h}),"Electronic Panic"),msgbox(0.25*w,0,0.5*w,0.125*h),msgassistant(MAP_CNT,w,h) {
     //set sprite
     if (!backgroundTexture.loadFromFile(background_path[room_idx])) {
         std::cerr << "Background Loading Failed!\n";
@@ -47,6 +47,8 @@ Game::Game(unsigned int w,unsigned int h) : player_status(false),player(nullptr)
     //set vector
     set_based_on_map();
     
+    //msgAssist
+    msgassistant.show(room_idx);
 }
 
 void Game::vector_clear(){
@@ -63,6 +65,7 @@ void Game::set_based_on_map(){
     vector_clear();
     //set vectors
     const float cellSize=40.0f; // 每个格子的大小
+    bool reborn=false;
     for(int y=0;y<15;y++){
         for(int x=0;x<21;x++){
             if(currentRoom->map[y][x]=='#'){
@@ -77,8 +80,13 @@ void Game::set_based_on_map(){
             else if(currentRoom->map[y][x]=='t'){
                 orgates.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize);       
             }
-            else if(currentRoom->map[y][x]=='B'){
+            else if(currentRoom->map[y][x]=='B'&&!reborn){
                 player=new Player(x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize/2.7,player_status);
+            }
+            else if(currentRoom->map[y][x]=='b'){
+                player=new Player(x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize/2.7,player_status);
+                reborn=true;
+                currentRoom->map[y][x]=' ';
             }
             else if(currentRoom->map[y][x]-'0'>=0&&currentRoom->map[y][x]-'0'<MAP_CNT){
                 transports.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize,currentRoom->map[y][x]-'0');
@@ -163,6 +171,9 @@ void Game::processEvents(){
         if (event->is<sf::Event::Closed>()) {
             window.close();
         }
+        if (const auto* mouse = event->getIf<sf::Event::MouseButtonPressed>()){
+            msgassistant.show(room_idx);
+        }
     }
     player->control(walls,electronics,orgates,andgates,notgates,xorgates);
     call_update();
@@ -175,6 +186,7 @@ void Game::call_update(){
     if(towards!=-1){
         msgbox.set("Press Space to Change the Room");
         if(call_Press(sf::Keyboard::Key::Space)){
+            msgassistant.inc_vis(room_idx);
             updated=true;
             room_idx=towards;
         }
@@ -191,7 +203,7 @@ void Game::call_update(){
             std::cout << player->status << ' ' << info.judge;
             if(player->status==info.judge){
                 std::cout << "YES!" << '\n';
-                currentRoom->map[info.mappos_x][info.mappos_y]=' ';
+                currentRoom->map[info.mappos_x][info.mappos_y]='b';
                 updated=true;
                 //TODO
             }
@@ -210,6 +222,7 @@ void Game::update(){
     updated=false;
     loadBackground(room_idx);
     currentRoom=std::make_unique<Room>(room_idx); 
+    msgassistant.show(room_idx);
     set_based_on_map();
 }
 
@@ -269,4 +282,5 @@ void Game::sourcerender(){
 void Game::msgboxrender(){
     //window.draw(msgbox.msgSprite);
     window.draw(msgbox.text);
+    window.draw(msgassistant.msg.text);
 }

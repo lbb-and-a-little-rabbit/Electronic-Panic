@@ -10,6 +10,7 @@ class Msgbox{
     sf::Sprite msgSprite;
     sf::Text text;
     friend class Game;
+    friend class MsgAssistant;
 
 public:
     Msgbox(float x, float y, float width, float height);
