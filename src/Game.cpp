@@ -181,6 +181,7 @@ void Game::processEvents(){
 
 void Game::call_update(){
     player_status=player->status;
+    msgbox.update();
 
     int towards=player->touchtransport(transports);
     if(towards!=-1){
@@ -203,10 +204,10 @@ void Game::call_update(){
             if(player->status==info.judge){
                 currentRoom->map[info.mappos_x][info.mappos_y]='b';
                 updated=true;
-                //TODO
+                msgbox.settime("You've fixed it!Well Down!",2.5);
             }
             else{
-                //TODO
+                msgbox.settime("Wrong Status!",1.5);
             }
         }
     }

@@ -27,5 +27,21 @@ bool Msgbox::nulltext(){
 }
 
 void Msgbox::set(std::string s){
+    if(clocking) return;
     text.setString(s);
+}
+
+void Msgbox::settime(std::string s, float time) {
+    text.setString(s);      // 设置文字
+    displayTime = time;     // 设置显示时间
+    textclock.restart();    // 重新计时
+    clocking=true;
+}
+
+void Msgbox::update() {
+    if(!clocking) return;
+    if (!nulltext() && textclock.getElapsedTime().asSeconds() >= displayTime) {
+        text.setString("");  // 时间到，清空文字
+        clocking=false;
+    }
 }
