@@ -1,7 +1,7 @@
 #include "msgbox.h"
 
 sf::Texture Msgbox::msgTexture("assets/msgbox.png");
-sf::Font Msgbox::font("assets/FontA.ttf");
+sf::Font Msgbox::font("assets/ScreenMatrix-1.ttf");
 
 Msgbox::Msgbox(float x, float y, float width, float height) : msgSprite(msgTexture),text(font) {
     text.setString("");
@@ -17,8 +17,8 @@ Msgbox::Msgbox(float x, float y, float width, float height) : msgSprite(msgTextu
     );
     msgSprite.setScale(scale);
 
-    text.setFillColor(sf::Color::Red);
-    text.setCharacterSize(50.f);
+    text.setFillColor(sf::Color::Green);
+    text.setCharacterSize(25.f);
     text.setPosition({x-0.25f*width,y+0.25f*height});
 }
 

@@ -139,6 +139,9 @@ void Game::Frame(){
     for (Wall &wall : walls) {
         wall.update(delta);
     }
+    for (Transport &t : transports) {
+        t.update(delta);
+    }
     player->update(delta);
 }
 

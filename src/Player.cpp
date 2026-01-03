@@ -9,7 +9,7 @@ sf::Texture n2("assets/n2.png");
 sf::Texture n3("assets/n3.png");
 std::vector<sf::Texture> Player::n_playerTexture;
 
-Player::Player(float x,float y,float r,bool status) : r(r),pos(x,y),physicalR(0.7*r),status(status),playerSprite(status?p1:n3) {
+Player::Player(float x,float y,float r,bool status) : r(r),pos(x,y),physicalR(0.7*r),status(status),playerSprite(status?p1:n1) {
     if(p_playerTexture.size()<3){
         p_playerTexture.push_back(p1);
         p_playerTexture.push_back(p2);
@@ -142,7 +142,7 @@ void Player::changeStatus(){
 
     // 切换纹理，但保持当前缩放
     sf::Vector2f currentScale = playerSprite.getScale();
-    playerSprite.setTexture(status ? p1 : n3);
+    playerSprite.setTexture(status ? p1 : n1);
     playerSprite.setScale(currentScale);  // 保持缩放
 
     // 设置中心原点
