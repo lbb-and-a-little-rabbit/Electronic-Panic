@@ -131,9 +131,7 @@ void Game::loadBackground(int idx) {
         return;
     }
     //acoustic
-    acoustics.openFromFile("assets/trans.mp3");
-    acoustics.setLooping(false);
-    acoustics.play();
+    setAcoustics("assets/trans.mp3");
     // 淡出旧音乐
     while(currentMusic.getVolume() > 0){
         currentMusic.setVolume(currentMusic.getVolume() - 1);
@@ -147,6 +145,15 @@ void Game::loadBackground(int idx) {
     currentMusic.setVolume(100);
     currentMusic.setLooping(true);
     currentMusic.play();
+}
+
+void Game::setAcoustics(std::string s){
+    if(!acoustics.openFromFile(s)){
+        std::cerr << "Acoustics load file!";
+        exit(-1);
+    }
+    acoustics.setLooping(false);
+    acoustics.play();
 }
 
 /*===       Asisstant Function       ===*/
@@ -229,6 +236,7 @@ void Game::call_update(){
         msgbox.set("Press Space to Fix the Gate");
         if(call_Press(sf::Keyboard::Key::Space)){
             if(player->status==info.judge){
+                setAcoustics("assets/right.mp3");
                 currentRoom->map[info.mappos_x][info.mappos_y]='b';
                 updated=true;
                 idx_change=false;
@@ -236,7 +244,8 @@ void Game::call_update(){
                 msgbox.settime("You've fixed it!Well Down!",2.5);
             }
             else{
-                msgbox.settime("Wrong Status!",1.5);
+                setAcoustics("assets/error.mp3");
+                msgbox.settime("Wrong Status!",2.5);
             }
         }
     }

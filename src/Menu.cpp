@@ -30,7 +30,7 @@ Menu::Menu()
     exitText.setPosition({300.f, 330.f});
 
     // 菜单音乐
-    if (currentMusic.openFromFile("assets/dive.ogg")) {
+    if (currentMusic.openFromFile("assets/menu.mp3")) {
         currentMusic.setLooping(true);
         currentMusic.play();
     }

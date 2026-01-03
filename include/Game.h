@@ -63,6 +63,7 @@ class Game{
 
     void set_based_on_map();
     void vector_clear();
+    void setAcoustics(std::string s);
     void processEvents();
     void call_update();
     void update();
