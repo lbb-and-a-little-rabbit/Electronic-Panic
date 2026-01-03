@@ -200,9 +200,7 @@ void Game::call_update(){
     if(info.mappos_x!=-1){
         msgbox.set("Press Space to Fix the Gate");
         if(call_Press(sf::Keyboard::Key::Space)){
-            std::cout << player->status << ' ' << info.judge;
             if(player->status==info.judge){
-                std::cout << "YES!" << '\n';
                 currentRoom->map[info.mappos_x][info.mappos_y]='b';
                 updated=true;
                 //TODO
@@ -240,10 +238,7 @@ void Game::render(){
     judgementrender();
     gaterender();
     playerrender();
-
-    //temp for test
     msgboxrender();
-    //tem for test
 
     window.display();
 }
@@ -280,7 +275,6 @@ void Game::sourcerender(){
 }
 
 void Game::msgboxrender(){
-    //window.draw(msgbox.msgSprite);
     window.draw(msgbox.text);
     window.draw(msgassistant.msg.text);
 }

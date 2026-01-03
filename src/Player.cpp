@@ -58,13 +58,13 @@ void Player::control(std::vector<Wall> &walls,std::vector<Electronic> &electroni
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) movement.x += speed;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) movement.y += speed;
 
-    //shape.move(movement);
     pos+=movement;
     if(touchWall(walls) || touchGate(ors,ands,nots,xors)) pos=old_pos;
     playerSprite.setPosition(pos);
 
     if(touchElectronic(electronics)){
-        changeStatus();
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::C))
+            changeStatus();
     }
 }
 
