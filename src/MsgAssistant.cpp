@@ -16,6 +16,21 @@ void MsgAssistant::msgset(){
     messages[1].push_back("Remember the Following Rules:");
     messages[1].push_back("only 0 | 0 = 0!");
     messages[1].push_back("Have A Nice Trip!");
+
+    messages[2].push_back("This is a AND Gate House!");
+    messages[2].push_back("Remember the Following Rules:");
+    messages[2].push_back("only 1 & 1 = 1!");
+    messages[2].push_back("Have A Nice Trip!");
+
+    messages[3].push_back("This is a XOR Gate House!");
+    messages[3].push_back("Remember the Following Rules:");
+    messages[3].push_back("only 0 ^ 1 = 1!");
+    messages[3].push_back("Have A Nice Trip!");
+
+    messages[4].push_back("This is a NOT Gate House!");
+    messages[4].push_back("Remember the Following Rules:");
+    messages[4].push_back("Just Be Different");
+    messages[4].push_back("Have A Nice Trip!");
 }
 
 void MsgAssistant::show(int idx){

@@ -120,6 +120,12 @@ void Game::set_based_on_map(){
             else if(currentRoom->map[y][x]=='&'){
                 andgates.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize);
             }
+            else if(currentRoom->map[y][x]=='^'){
+                xorgates.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize);
+            }
+            else if(currentRoom->map[y][x]=='!'){
+                notgates.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize);
+            }
             else if(currentRoom->map[y][x]=='B'&&!reborn){
                 player=new Player(x*cellSize+cellSize/2,y*cellSize+cellSize/2,cellSize/2.7,player_status);
             }
