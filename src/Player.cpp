@@ -63,8 +63,15 @@ void Player::control(std::vector<Wall> &walls,std::vector<Electronic> &electroni
     playerSprite.setPosition(pos);
 
     if(touchElectronic(electronics)){
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::C))
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::C)){
+            if(!acous.openFromFile("assets/change.mp3")){
+                std::cerr << "acoustics load fail!";
+                exit(-1);
+            }
+            acous.setLooping(false);
+            acous.play();
             changeStatus();
+        }
     }
 }
 

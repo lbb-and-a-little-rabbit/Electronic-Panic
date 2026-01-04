@@ -11,7 +11,7 @@ std::vector<std::string> background_path={
 };
 
 std::vector<std::string> music_path={
-    "assets/CPU.ogg",
+    "assets/electronic_glitter.mp3",
     "assets/dive.ogg",
     "assets/dive.ogg",
     "assets/dive.ogg",
@@ -223,6 +223,9 @@ void Game::Frame(){
     }
     for (Transport &t : transports) {
         t.update(delta);
+    }
+    for (Electronic &e : electronics) {
+        e.update(delta);
     }
     player->update(delta);
 }

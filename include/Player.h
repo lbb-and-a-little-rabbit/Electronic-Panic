@@ -1,6 +1,8 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+#include <iostream>
 #include "Wall.h"
 #include "Electronic.h"
 #include "Transport.h"
@@ -15,6 +17,9 @@ class Player{
     float elapsedTime = 0.f;
     int currentFrame = 0;
     const float switchTime = 1.0f; // 每 1 秒切换一次
+
+    //Acoustics
+    sf::Music acous;
 
     float speed = 0.1;
     sf::Vector2f pos;
