@@ -21,6 +21,11 @@ std::vector<std::string> music_path={
 /*===       constructor       ===*/
 
 Game::Game(unsigned int w,unsigned int h) : player_status(false),player(nullptr),updated(false),room_idx(0),window(sf::VideoMode({w,h}),"Electronic Panic"),msgbox(0.25*w,0,0.5*w,0.125*h),msgassistant(MAP_CNT,w,h) {
+    //set view
+    worldView.setSize({WORLD_WIDTH, WORLD_HEIGHT});
+    worldView.setCenter({WORLD_WIDTH / 2.f, WORLD_HEIGHT / 2.f});
+    window.setView(worldView);
+    
     //set sprite
     if (!backgroundTexture.loadFromFile(background_path[room_idx])) {
         std::cerr << "Background Loading Failed!\n";
@@ -28,13 +33,7 @@ Game::Game(unsigned int w,unsigned int h) : player_status(false),player(nullptr)
     }
     backgroundSprite=std::make_unique<sf::Sprite>(backgroundTexture);
     // 缩放铺满窗口
-    sf::Vector2u textureSize = backgroundTexture.getSize();
-    sf::Vector2u windowSize = window.getSize();
-    sf::Vector2f scale(
-        float(windowSize.x) / textureSize.x,
-        float(windowSize.y) / textureSize.y
-    );
-    backgroundSprite->setScale(scale);
+    resizeBackground();
 
     //set music
     if (!currentMusic.openFromFile(music_path[room_idx])) {
@@ -57,6 +56,34 @@ Game::Game(unsigned int w,unsigned int h) : player_status(false),player(nullptr)
 
 
 /*===       Asisstant Function       ===*/
+
+void Game::resizeBackground(){
+    if (!backgroundSprite) return;
+
+    // 当前 View（注意：不是 window size）
+    const sf::View& view = window.getView();
+
+    // View 在世界中的尺寸
+    sf::Vector2f viewSize = view.getSize();
+
+    // 背景贴图原始尺寸
+    sf::Vector2u ts = backgroundTexture.getSize();
+
+    // 按 View 尺寸等比放大，确保完全覆盖
+    float scaleX = viewSize.x / ts.x;
+    float scaleY = viewSize.y / ts.y;
+    float scale  = std::max(scaleX, scaleY);
+
+    backgroundSprite->setScale({scale, scale});
+
+    // 对齐到 View 左上角
+    sf::Vector2f topLeft(
+        view.getCenter().x - viewSize.x / 2.f,
+        view.getCenter().y - viewSize.y / 2.f
+    );
+    backgroundSprite->setPosition(topLeft);
+}
+
 
 void Game::vector_clear(){
     walls.clear();
@@ -122,14 +149,7 @@ void Game::loadBackground(int idx) {
     }
 
     backgroundSprite->setTexture(backgroundTexture, true);
-
-    sf::Vector2u ts = backgroundTexture.getSize();
-    sf::Vector2u ws = window.getSize();
-    sf::Vector2f scale(
-        float(ws.x) / ts.x,
-        float(ws.y) / ts.y
-    );
-    backgroundSprite->setScale(scale);
+    resizeBackground();
 
     //set music
     if(!music_change){
@@ -206,6 +226,36 @@ void Game::processEvents(){
         if (event->is<sf::Event::Closed>()) {
             window.close();
         }
+
+        if (event->is<sf::Event::Resized>()) {
+            if (const auto* r = event->getIf<sf::Event::Resized>()) {
+
+                float windowRatio = float(r->size.x) / r->size.y;
+                float worldRatio  = WORLD_WIDTH / WORLD_HEIGHT;
+
+                sf::View view = worldView;
+
+                if (windowRatio > worldRatio) {
+                    // 窗口更宽 → 左右留黑
+                    float width = worldRatio / windowRatio;
+                    view.setViewport(sf::FloatRect(
+                        {(1.f - width) / 2.f, 0.f},
+                        {width, 1.f}
+                    ));
+                } else {
+                    // 窗口更高 → 上下留黑
+                    float height = windowRatio / worldRatio;
+                    view.setViewport(sf::FloatRect(
+                        {0.f, (1.f - height) / 2.f},
+                        {1.f, height}
+                    ));
+                }
+
+                window.setView(view);
+                resizeBackground();
+            }
+        }
+
         if (const auto* mouse = event->getIf<sf::Event::MouseButtonPressed>()){
             msgassistant.show(room_idx);
         }
@@ -284,7 +334,11 @@ bool Game::call_Press(sf::Keyboard::Key key){
 
 void Game::render(){
     window.clear(sf::Color(50, 50, 50));
+
+    window.setView(window.getDefaultView());
     window.draw(*backgroundSprite); 
+    window.setView(worldView);
+
     wallrender();
     sourcerender();
     electronicrender();

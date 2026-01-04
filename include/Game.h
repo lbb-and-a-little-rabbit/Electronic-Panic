@@ -18,6 +18,11 @@
 #include "MsgAssistant.h"
 
 class Game{
+    //Size and View
+    float WORLD_WIDTH  = 800.f;
+    float WORLD_HEIGHT = 600.f;
+    sf::View worldView;
+
     //Time
     sf::Clock frameClock;
     sf::Time dt;
@@ -61,6 +66,7 @@ class Game{
     //Time
     void Frame();
 
+    void resizeBackground();
     void set_based_on_map();
     void vector_clear();
     void setAcoustics(std::string s);
