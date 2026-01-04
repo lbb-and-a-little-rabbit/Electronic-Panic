@@ -12,9 +12,9 @@ std::vector<std::string> background_path={
 
 std::vector<std::string> music_path={
     "assets/electronic_glitter.mp3",
-    "assets/dive.ogg",
-    "assets/dive.ogg",
-    "assets/dive.ogg",
+    "assets/scattered_and_lost.mp3",
+    "assets/scattered_and_lost.mp3",
+    "assets/CPU.ogg",
     "assets/dive.ogg",
 };
 

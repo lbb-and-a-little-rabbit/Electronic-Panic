@@ -35,7 +35,7 @@ void MsgAssistant::msgset(){
 
 void MsgAssistant::show(int idx){
     if(idx==messages.size()){
-        msg.set("You've fixed all the gates here!");
+        msg.set("You've Fixed All the Gates Here!");
         return;
     }
     if(!vis_time[idx]&&ref_cnt[idx]<messages[idx].size()){
