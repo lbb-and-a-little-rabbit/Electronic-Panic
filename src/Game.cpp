@@ -129,7 +129,7 @@ void Game::set_based_on_map(){
                 currentRoom->map[y][x]=' ';
             }
             else if(currentRoom->map[y][x]-'0'>=0&&currentRoom->map[y][x]-'0'<MAP_CNT){
-                transports.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize,currentRoom->map[y][x]-'0');
+                transports.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize,currentRoom->map[y][x]-'0',y,x);
             }
             else if(currentRoom->map[y][x]=='*'||currentRoom->map[y][x]=='/'){
                 judgements.emplace_back(x*cellSize,y*cellSize,cellSize,cellSize,currentRoom->map[y][x],y,x);
@@ -273,20 +273,34 @@ void Game::call_update(){
     player_status=player->status;
     msgbox.update();
 
-    int towards=player->touchtransport(transports);
-    if(towards!=-1){
+    //Transort
+    Info_Transport towards=player->touchtransport(transports);
+    if(towards.towards!=-1){
         msgbox.set("Press Space to Change the Room");
         if(call_Press(sf::Keyboard::Key::Space)){
             msgassistant.inc_vis(room_idx);
             updated=true;
-            room_idx=towards;
+            std::vector<std::vector<int>> dir={{0,1},{0,-1},{-1,0},{1,0}};
+            for(int i=0;i<4;i++){
+                int nx=towards.posx+dir[i][0];
+                int ny=towards.posy+dir[i][1];
+                if(nx>=0&&nx<15&&ny>=0&&ny<21){
+                    if(currentRoom->map[nx][ny]==' '){
+                        currentRoom->map[nx][ny]='b';
+                        break;
+                    }
+                }
+            }
+            room_idx=towards.towards;
         }
         return;
     }
     else{
         msgbox.set("");
     }
+    //Transport
 
+    //Judgement
     Info_Judgement info=player->touchjudgement(judgements);
     if(info.mappos_x!=-1){
         msgbox.set("Press Space to Fix the Gate");
@@ -308,6 +322,7 @@ void Game::call_update(){
     else{
         msgbox.set("");
     }
+    //Judgement
 }
 
 void Game::update(){

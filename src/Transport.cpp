@@ -4,7 +4,7 @@ sf::Texture trans1("assets/transport1.jpg");
 sf::Texture trans2("assets/transport2.png");
 std::vector<sf::Texture> Transport::transTexture;
 
-Transport::Transport(float x, float y, float width, float height,int towards) : towards(towards),transSprite(trans1) {
+Transport::Transport(float x, float y, float width, float height,int towards,int posx,int posy) : mappos_x(posx),mappos_y(posy),towards(towards),transSprite(trans1) {
     if(transTexture.size()<2){
         transTexture.push_back(trans1);
         transTexture.push_back(trans2);

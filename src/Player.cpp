@@ -88,14 +88,18 @@ bool Player::touchElectronic(std::vector<Electronic> &electronics){
     return false;
 }
 
-int Player::touchtransport(std::vector<Transport> &transports){
+Info_Transport Player::touchtransport(std::vector<Transport> &transports){
     sf::FloatRect trueBound = getHitbox();
+    Info_Transport res;
     for (auto &t : transports) {
         if (trueBound.findIntersection(t.transSprite.getGlobalBounds())) {
-            return t.towards;
+            res.towards=t.towards;
+            res.posx=t.mappos_x;
+            res.posy=t.mappos_y;
+            return res;
         }
     }
-    return -1;
+    return res;
 }
 
 Info_Judgement Player::touchjudgement(std::vector<Judgement> &judgements){

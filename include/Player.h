@@ -33,7 +33,7 @@ public:
     void control(std::vector<Wall> &walls,std::vector<Electronic> &electronics,std::vector<OR> &ors,std::vector<AND> &ands,std::vector<NOT> &nots,std::vector<XOR> &xors);
     bool touchWall(std::vector<Wall> &walls);
     bool touchElectronic(std::vector<Electronic> &electronics);
-    int touchtransport(std::vector<Transport> &transports);
+    Info_Transport touchtransport(std::vector<Transport> &transports);
     Info_Judgement touchjudgement(std::vector<Judgement> &judgements);
     bool touchGate(std::vector<OR> &ors,std::vector<AND> &ands,std::vector<NOT> &nots,std::vector<XOR> &xors);
     void changeStatus();
